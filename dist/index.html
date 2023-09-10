@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do List</title>
+    <script src="./main.js" defer></script>
+    <link rel="stylesheet" href="styles.css">
+</head> 
+<body>
+    <div class="header">
+        TO DO LIST
+    </div>
+    <div class="sidebar">
+        <p class="sidebar-title">Home</p>
+        <div class="tasks-type">
+            <p id="all-task">All Tasks</p>
+            <p id="due-soon">Due Soon</p>
+            <p id="important">Important</p>
+        </div>
+        <div class="sidebar-project">
+            <p class="sidebar-title">Projects</p>
+            <button id="add-project">+</button>
+        </div>
+       
+        <div class="project-list">
+        </div>
+        <div id="project-form-container" class="hidden">
+            <form id="project-form" action="">
+                <input id="project-name" type="text" placeholder="Enter Project Name" required>
+                <button type="submit" id="confirm-project-name">Confirm</button>
+                <button type="button" id="cancel-project-name">Cancel</button>
+            </form>
+        </div>
+       
+    </div>
+    <div class="tasks-content">
+        <div class="project-name-display">
+        </div>
+        <div class="task-list">
+
+        </div>
+        <button id="add-task" hidden>Add Task</button>
+        <div id="task-form-container" class="hidden">
+            <form id="task-form" action="">
+                <label for="task-title">Title</label>
+                <input id="task-title" type="text" name="task-title" required>
+                <label for="task-details">Details</label>
+                <input id="task-details" type="text" required>
+                <label for="task-date">Due Date</label>
+                <input id="task-date" type="date" required>
+                <div class="task-buttons">
+                    <button type="submit" id="confirm-task">Confirm</button>
+                    <button type="button" id="cancel-task">Cancel</button>
+                </div>
+            </form>
+        </div>
+        
+        
+    </div>
+    
+</body>
+</html>
