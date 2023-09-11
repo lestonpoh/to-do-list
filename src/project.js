@@ -6,6 +6,7 @@ const projectList = JSON.parse(localStorage.getItem("projectList"))
 if (projectList === null){
     projectList = []
 }
+console.log(projectList)
 
 const createProjectListener = function(){
     const addProject = document.querySelector("#add-project");
