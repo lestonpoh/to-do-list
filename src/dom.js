@@ -1,5 +1,7 @@
-import { projectList } from "./project"
+import { projectList,deleteProject } from "./project"
+import { deleteTask } from "./task"
 import deleteImg from "./images/delete.png"
+import editImg from "./images/edit.png"
 
 const showForm = function(formContainerId){
     const formContainer = document.querySelector(formContainerId)
@@ -34,8 +36,8 @@ const displayProject = function(){
         projectSidebar.id = "project" + index
         projectSidebar.innerHTML = `<p>${project.projectName}</p>`
 
-        const deleteProject = document.createElement("img")
-        deleteProject.src = deleteImg
+        const deleteProjectBtn = document.createElement("img")
+        deleteProjectBtn.src = deleteImg
         
 
         projectSidebar.childNodes[0].addEventListener("click",(e)=>{
@@ -44,22 +46,33 @@ const displayProject = function(){
             showButton(document.querySelector("#add-task"))
         })
 
-        deleteProject.addEventListener("click",(e)=>{
-            console.log(e.target.parentElement.id.slice(7,))
+        deleteProjectBtn.addEventListener("click",(e)=>{
+            deleteProject(e.target.parentElement.id.slice(7,))
 
         })
 
         projectListSidebar.appendChild(projectSidebar)
-        projectSidebar.appendChild(deleteProject)
+        projectSidebar.appendChild(deleteProjectBtn)
     })
 }
+
+let currentTaskId
+let isEditTask = false
+const setIsEditTask = function(value){
+    isEditTask = value
+}
+
 
 const displayTask = function(projectId){
     const projectNameDisplay = document.querySelector(".project-name-display")
     projectNameDisplay.innerHTML=`<p>${projectList[projectId].projectName}</p>`
-    
+
+    document.querySelector(".tasks-content").insertBefore(document.querySelector("#task-form-container"),null)
+
     const taskListDisplay = document.querySelector(".task-list")
     taskListDisplay.innerHTML = ""
+
+    hideForm("#task-form-container")
     
     projectList[projectId].taskList.forEach((task,index)=>{
         const taskDisplay = document.createElement("div")
@@ -76,7 +89,14 @@ const displayTask = function(projectId){
             taskCheckbox.checked = true
             taskDisplay.classList.add("completed")
         }
-        
+
+        const deleteTaskBtn = document.createElement("img")
+        deleteTaskBtn.src = deleteImg
+        taskDisplay.insertBefore(deleteTaskBtn,taskDisplay.childNodes[3])
+
+        const editTaskBtn = document.createElement("img")
+        editTaskBtn.src = editImg
+        taskDisplay.insertBefore(editTaskBtn,taskDisplay.childNodes[3])
         
         taskCheckbox.addEventListener("click",()=>{
             if (taskCheckbox.checked){
@@ -87,9 +107,25 @@ const displayTask = function(projectId){
                 task.completed = false
                 taskDisplay.classList.remove("completed")
             }
-            task.completed = taskCheckbox.checked? true : false
+            
         })
 
+        deleteTaskBtn.addEventListener("click",(e)=>{
+            deleteTask(e.target.parentElement.id.slice(4,))
+        })
+
+        editTaskBtn.addEventListener("click",(e)=>{
+            currentTaskId = e.target.parentElement.id.slice(4,)
+            setIsEditTask(true)
+            const taskFormContainer = document.querySelector("#task-form-container")
+            taskListDisplay.insertBefore(taskFormContainer,e.target.parentElement.nextSibling)
+            showForm("#task-form-container")
+            hideButton(document.querySelector("#add-task"))
+            taskDisplay.childNodes[2].style.visibility="hidden"
+            taskDisplay.childNodes[3].style.visibility="hidden"
+            taskDisplay.childNodes[4].style.visibility="hidden"
+            
+        })
 
     })
 }
@@ -98,4 +134,4 @@ const displayTask = function(projectId){
 
 
 export {showForm,hideForm,resetForm, showButton, hideButton, 
-    displayProject,displayTask,currentProjectId}
+    displayProject,displayTask,currentProjectId,currentTaskId,isEditTask,setIsEditTask}

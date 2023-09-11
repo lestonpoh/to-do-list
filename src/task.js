@@ -1,31 +1,53 @@
 import { showForm, hideForm,resetForm, showButton, hideButton,
-        currentProjectId, displayTask} from "./dom";
+        currentProjectId, currentTaskId, isEditTask,setIsEditTask, displayTask} from "./dom";
 import { projectList } from "./project";
 
-const taskList = []
+
 
 const createTaskListener = function(){
     const addTask = document.querySelector("#add-task");
+    const cancelTask = document.querySelector("#cancel-task")
+    const taskForm = document.querySelector("#task-form")
+
+    const taskContent = document.querySelector(".tasks-content")
+    const taskFormContainer = document.querySelector("#task-form-container")
     addTask.addEventListener("click",()=>{
+        setIsEditTask(false)
+        taskContent.insertBefore(taskFormContainer,null)
         showForm("#task-form-container")
         hideButton(addTask)
     })
 
-    const cancelTask = document.querySelector("#cancel-task")
-    cancelTask.addEventListener("click",()=>{
+    
+    cancelTask.addEventListener("click",(e)=>{
+        if (isEditTask){
+            document.querySelector("#task"+currentTaskId).childNodes[2].style.visibility="visible"
+            document.querySelector("#task"+currentTaskId).childNodes[3].style.visibility="visible"
+            document.querySelector("#task"+currentTaskId).childNodes[4].style.visibility="visible"
+        }else{
+            
+        }
+
         hideForm("#task-form-container")
         resetForm(document.querySelector("#task-form"))
         showButton(addTask)
     })
 
-    const taskForm = document.querySelector("#task-form")
+    
     taskForm.addEventListener("submit",(e)=>{
         e.preventDefault()
-        console.log(projectList)
-        addNewTask()
+        if (isEditTask === false){
+            addNewTask()
+        }else{
+            editTask()
+           
+        }
         resetForm(document.querySelector("#task-form"))
         showButton(addTask)
     })
+
+
+    
 }
 
 const createTask = function(title,detail,date,completed){
@@ -38,10 +60,26 @@ const addNewTask = function(){
     const taskDate = document.querySelector("#task-date").value
     const newTask =  createTask(taskTitle,taskDetail,taskDate,false)
     projectList[currentProjectId].taskList.push(newTask)
-    hideForm("#task-form-container")
     localStorage.setItem("projectList",JSON.stringify(projectList))
     displayTask(currentProjectId)
     
 }
 
-export {createTaskListener}
+const deleteTask = function(taskId){
+    projectList[currentProjectId].taskList.splice(taskId,1)
+    localStorage.setItem("projectList",JSON.stringify(projectList))
+    displayTask(currentProjectId)
+}
+
+const editTask = function(){
+    const editedTaskTitle = document.querySelector("#task-title").value
+    const editedTaskDetail = document.querySelector("#task-details").value
+    const editedTaskDate = document.querySelector("#task-date").value
+    projectList[currentProjectId].taskList[currentTaskId].title = editedTaskTitle
+    projectList[currentProjectId].taskList[currentTaskId].detail = editedTaskDetail
+    projectList[currentProjectId].taskList[currentTaskId].date = editedTaskDate
+    localStorage.setItem("projectList",JSON.stringify(projectList))
+    displayTask(currentProjectId)
+}
+
+export {createTaskListener, deleteTask, editTask}
