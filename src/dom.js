@@ -28,7 +28,6 @@ const resetForm = function(form){
 let currentProjectId
 
 const displayProject = function(){
-    console.log(projectList)
     const projectListSidebar = document.querySelector(".project-list")
     projectListSidebar.innerHTML = ""
     projectList.forEach((project,index)=>{
