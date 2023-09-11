@@ -1,7 +1,11 @@
 import { showForm, hideForm,resetForm,
         showButton, hideButton, displayProject} from "./dom";
 
+
 const projectList = JSON.parse(localStorage.getItem("projectList"))
+if (projectList === null){
+    projectList = []
+}
 
 const createProjectListener = function(){
     const addProject = document.querySelector("#add-project");
@@ -34,7 +38,6 @@ const createProject = function(projectName){
 const addNewProject = function(){
     const projectName = document.querySelector("#project-name").value;
     const newProject = createProject(projectName)
-    console.log(typeof projectList)
     projectList.push(newProject)
     hideForm("#project-form-container")
     localStorage.setItem("projectList",JSON.stringify(projectList))
